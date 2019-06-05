@@ -1,5 +1,3 @@
-extern crate minifb;
-
 pub mod ppm_loader {
     use std::fs::File;
     use std::io::{Read, BufRead};
