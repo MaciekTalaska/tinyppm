@@ -3,5 +3,10 @@ name = "tinyppm"
 version = "0.1.0"
 authors = ["MaciekTalaska <maciek.talaska@gmail.com>"]
 edition = "2018"
+description = "tiny ppm loading library"
+license = "MIT"
+repository = "https://github.com/MaciekTalaska/tinyppm"
+keywords = ["image", "graphics", "ppm", "library"]
+categories = ["graphics", "multimedia::images"]
 
 [dependencies]
