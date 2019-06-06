@@ -1,6 +1,6 @@
 [package]
 name = "tinyppm"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["MaciekTalaska <maciek.talaska@gmail.com>"]
 edition = "2018"
 description = "Tiny ppm loading library. This is actually the simpliest piece of code one can image that is functional and capable of loading images saved in .ppm format. Due to its simplicity it handles only 'raw ppm' files (i.e. those with 'P6' as their magic number in header' The other thing worth noting is that it is restricted to 24bit images (3 channels, 8bpp each)."

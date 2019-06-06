@@ -6,14 +6,20 @@ pub mod ppm_loader {
     /// Reads specified .ppm file
     /// Returns (width: usize, height: usize, pixels: Vec<u32>)
     ///
-    /// 24bpp bitmaps are converted to 32 bit, so it is easy to push them to framebuffer
+    /// 24bpp bitmaps are converted to 32 bit, so it is easy to push them to framebuffer.
     ///
     /// # Examples
+    /// ```rust, no_run
+    /// extern crate tinyppm;
     ///
-    /// let filename = "my_file.ppm".to_string();
-    /// let (width, height, image) = tinyppm:ppm_loader::read_image_data(filename);
-    /// // all done, now use the raw data
+    /// // some code here...
     ///
+    /// fn my_function(filename: String) {
+    ///     let (width, height, image) = tinyppm:ppm_loader::read_image_data(filename);
+    ///     // `image` contains 32bit image data
+    /// }
+    ///
+    /// ```
     pub fn read_image_data(image_name: &String) -> (usize, usize, Vec<u32>) {
         let file = File::open(image_name).unwrap();
         let mut reader = std::io::BufReader::new(file);
