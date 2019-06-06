@@ -1,21 +1,9 @@
 [package]
 name = "tinyppm"
-version = "0.1.3"
+version = "0.1.4"
 authors = ["MaciekTalaska <maciek.talaska@gmail.com>"]
 edition = "2018"
-description = "Tiny ppm loading library. This is actually the simpliest piece of code one can image that is functional and capable of loading images saved in .ppm format. Due to its simplicity it handles only 'raw ppm' files (i.e. those with 'P6' as their magic number in header'). The other thing worth noting is that it is restricted to 24bit images (3 channels, 8bpp each).\
-\
-Example of usage:\
-\
-```rust\
-extern crate tinyppm;\
-\
-fn my_function(filename: &String) {\
-    let (width, height, image) = tinyppm:ppm_loader::read_image_data(filename);\
-    // `image` contains 32bit image data\
-}\
-\
-```"
+description = "README.md"
 license = "MIT"
 repository = "https://github.com/MaciekTalaska/tinyppm"
 keywords = ["image", "graphics", "ppm", "library"]
