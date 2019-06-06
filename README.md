@@ -14,17 +14,12 @@ Usage
 ```rust
 extern crate tinyppm;
 
-// some code
-
-fn my_function(filename: String) -> {
-    let (width, height, image) = tinyppm:ppm_loader::get_image_data(filename);
-    // rest of the code
+fn my_function(filename: &String) {
+    let (width, height, image) = tinyppm:ppm_loader::read_image_data(filename);
+    // `image` contains 32bit image data
 }
 
-// some more code
-
 ```
-
 
 License
 -------
