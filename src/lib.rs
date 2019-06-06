@@ -14,7 +14,7 @@ pub mod ppm_loader {
     ///
     /// // some code here...
     ///
-    /// fn my_function(filename: String) {
+    /// fn my_function(filename: &String) {
     ///     let (width, height, image) = tinyppm:ppm_loader::read_image_data(filename);
     ///     // `image` contains 32bit image data
     /// }
