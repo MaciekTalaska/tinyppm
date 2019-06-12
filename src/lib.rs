@@ -20,7 +20,7 @@ pub mod ppm_loader {
     /// }
     ///
     /// ```
-    pub fn read_image_data(image_name: &String) -> (usize, usize, Vec<u32>) {
+    pub fn read_image_data(image_name: &str) -> (usize, usize, Vec<u32>) {
         let file = File::open(image_name).unwrap();
         let mut reader = std::io::BufReader::new(file);
         let (width, height) = read_image_info(&mut reader);

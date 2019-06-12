@@ -9,7 +9,7 @@ Usage
 -----
 
 1. Add `tinyppm` to your `Cargo.toml`
-2. Call `get_image_data`:
+2. Call `read_image_data`:
 
 ```rust
 extern crate tinyppm;
