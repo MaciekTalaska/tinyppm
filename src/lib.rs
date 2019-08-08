@@ -28,6 +28,7 @@ pub mod ppm_loader {
         let mut rgb_buffer: Vec<u8> = Vec::with_capacity(width * height * 3);
         let read_bytes = reader.read_to_end(rgb_buffer.as_mut()).unwrap();
 
+        // TODO: return custom error here
         if read_bytes != width * height * 3 {
             println!("error while reading image data");
             std::process::exit(5);
@@ -37,6 +38,7 @@ pub mod ppm_loader {
         (width, height, buffer)
     }
 
+    /// converts 24bpp (8 bpp per channel) into 32bpp (ARGB) image data 
     fn convert_rgb_to_argb(width: usize, height: usize, rgb_buffer: &mut Vec<u8>) -> Vec<u32> {
         let mut buffer: Vec<u32> = vec![0; width * height];
         for index in 0..width * height {
@@ -50,6 +52,7 @@ pub mod ppm_loader {
         buffer
     }
 
+    /// Reads image info (header) and returns tuple with (with, height)
     fn read_image_info(reader: &mut BufReader<File>) -> (usize, usize) {
         let mut string_buffer = String::new();
         for _i in 0..3 {
@@ -68,16 +71,20 @@ pub mod ppm_loader {
         (width, height)
     }
 
+    /// checks if image is 8bit per channel (24bpp).
     fn validate_color_depth(bpp_str: String) {
         let bpp = bpp_str.parse::<usize>().expect("image bit depth should be a number");
+        // TODO: this should not exit, instead custom error should be returned
         if bpp != 255usize {
             println!("only 8bpp RGB images are supported!");
             std::process::exit(4);
         }
     }
 
+    /// validate ppm image - should check header etc
     fn validate_ppm_image(ppm_id: &str) {
-        if ppm_id.to_string() != "P6" {
+        // TODO: this should not exit, return custom error here
+        if ppm_id != "P6" {
             println!("invalid header");
             std::process::exit(3);
         }
