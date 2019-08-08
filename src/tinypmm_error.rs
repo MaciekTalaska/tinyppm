@@ -25,7 +25,7 @@ impl TinyppmError {
 
 impl std::fmt::Display for TinyppmError {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        unimplemented!()
+        write!(f, "{}", self.tinyppm_error_to_message())
     }
 }
 
