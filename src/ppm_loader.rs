@@ -1,7 +1,18 @@
 use std::fs::File;
 use std::io::{Read, BufRead};
 use std::io::BufReader;
+use crate::tinypmm_error::TinyppmError;
 
+const PPM_BINARY_HEADER : &str = "P6";              // binary ppm header is always "P6"
+
+pub struct PPMImage {
+    height: usize,
+    width: usize,
+    pixels: Vec<u32>,
+}
+
+// TODO: change the in-code documentation (this docstring)
+// TODO: if all is Ok, return struct instead of tuple
 /// Reads specified .ppm file
 /// Returns (width: usize, height: usize, pixels: Vec<u32>)
 ///
@@ -13,16 +24,17 @@ use std::io::BufReader;
 ///
 /// // some code here...
 ///
-/// fn my_function(filename: &String) {
+/// fn my_function(filename: &str) {
 ///     let (width, height, image) = tinyppm:ppm_loader::read_image_data(filename);
 ///     // `image` contains 32bit image data
 /// }
 ///
 /// ```
-pub fn read_image_data(image_name: &str) -> (usize, usize, Vec<u32>) {
-    let file = File::open(image_name).unwrap();
+pub fn read_image_data(image_name: &str) -> Result<(usize, usize, Vec<u32>), TinyppmError> {
+    let file = File::open(image_name)?;
+
     let mut reader = std::io::BufReader::new(file);
-    let (width, height) = read_image_info(&mut reader);
+    let (width, height) = read_image_info(&mut reader)?;
 
     let mut rgb_buffer: Vec<u8> = Vec::with_capacity(width * height * 3);
     let read_bytes = reader.read_to_end(rgb_buffer.as_mut()).unwrap();
@@ -34,7 +46,7 @@ pub fn read_image_data(image_name: &str) -> (usize, usize, Vec<u32>) {
     }
 
     let buffer = convert_rgb_to_argb(width, height, &mut rgb_buffer);
-    (width, height, buffer)
+    Ok((width, height, buffer))
 }
 
 /// converts 24bpp (8 bpp per channel) into 32bpp (ARGB) image data
@@ -52,41 +64,33 @@ fn convert_rgb_to_argb(width: usize, height: usize, rgb_buffer: &mut Vec<u8>) ->
 }
 
 /// Reads image info (header) and returns tuple with (with, height)
-fn read_image_info(reader: &mut BufReader<File>) -> (usize, usize) {
+fn read_image_info(reader: &mut BufReader<File>) -> Result<(usize, usize), TinyppmError> {
     let mut string_buffer = String::new();
     for _i in 0..3 {
         reader.read_line(&mut string_buffer).unwrap();
     }
 
     let ppm_id = string_buffer.lines().nth(0usize).unwrap();
-    validate_ppm_image(ppm_id);
+    if ppm_id != PPM_BINARY_HEADER {
+        return Err(TinyppmError::new(TinyppmError::InvalidHeader));
+    }
 
     let image_size = string_buffer.lines().nth(1usize).unwrap().to_string().clone();
     let (width, height) = extract_image_size(image_size);
 
     let color_depth = string_buffer.lines().nth(2usize).unwrap().to_string().clone();
-    validate_color_depth(color_depth);
 
-    (width, height)
+    if ! is_image_24bpp(color_depth) {
+        return Err(TinyppmError::new(TinyppmError::Not24bpp));
+    }
+
+    Ok((width, height))
 }
 
 /// checks if image is 8bit per channel (24bpp).
-fn validate_color_depth(bpp_str: String) {
+fn is_image_24bpp(bpp_str: String) -> bool {
     let bpp = bpp_str.parse::<usize>().expect("image bit depth should be a number");
-    // TODO: this should not exit, instead custom error should be returned
-    if bpp != 255usize {
-        println!("only 8bpp RGB images are supported!");
-        std::process::exit(4);
-    }
-}
-
-/// validate ppm image - should check header etc
-fn validate_ppm_image(ppm_id: &str) {
-    // TODO: this should not exit, return custom error here
-    if ppm_id != "P6" {
-        println!("invalid header");
-        std::process::exit(3);
-    }
+    bpp == 255usize
 }
 
 fn extract_image_size(size: String) -> (usize, usize) {

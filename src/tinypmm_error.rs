@@ -1,4 +1,5 @@
 use std::error::Error;
+use std::convert::From;
 
 #[derive(Debug, PartialEq)]
 pub enum TinyppmError {
@@ -32,5 +33,12 @@ impl std::fmt::Display for TinyppmError {
 impl Error for TinyppmError {
     fn description(&self) -> &str {
         &self.tinyppm_error_to_message()
+    }
+}
+
+impl From<std::io::Error> for TinyppmError {
+    fn from(io_error: std::io::Error) -> Self {
+        // this could be rather sth like a general 'problem reading file' error
+        TinyppmError::new(TinyppmError::FileNotFound)
     }
 }
