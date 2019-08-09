@@ -3,10 +3,10 @@ use std::convert::From;
 
 #[derive(Debug, PartialEq)]
 pub enum TinyppmError {
-    Not24bpp,
+    UnsupportedBPP,
     InvalidHeader,
     FileSizeMismatch,
-    FileNotFound
+    FileReadError
 }
 
 impl TinyppmError {
@@ -18,8 +18,8 @@ impl TinyppmError {
         match *self {
             TinyppmError::FileSizeMismatch => "Invalid file size. Unable to read enough data!",
             TinyppmError::InvalidHeader => "File is not proper binary .ppm file!",
-            TinyppmError::Not24bpp => "Only 24bpp .ppm images are supported",
-            TinyppmError::FileNotFound => "Unable to open specified file!"
+            TinyppmError::UnsupportedBPP => "Only 24bpp .ppm images are supported",
+            TinyppmError::FileReadError => "Error reading file!"
         }
     }
 }
@@ -37,8 +37,7 @@ impl Error for TinyppmError {
 }
 
 impl From<std::io::Error> for TinyppmError {
-    fn from(io_error: std::io::Error) -> Self {
-        // this could be rather sth like a general 'problem reading file' error
-        TinyppmError::new(TinyppmError::FileNotFound)
+    fn from(_io_error: std::io::Error) -> Self {
+        TinyppmError::new(TinyppmError::FileReadError)
     }
 }

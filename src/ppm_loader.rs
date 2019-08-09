@@ -37,7 +37,7 @@ pub fn read_image_data(image_name: &str) -> Result<(usize, usize, Vec<u32>), Tin
     let (width, height) = read_image_info(&mut reader)?;
 
     let mut rgb_buffer: Vec<u8> = Vec::with_capacity(width * height * 3);
-    let read_bytes = reader.read_to_end(rgb_buffer.as_mut()).unwrap();
+    let read_bytes = reader.read_to_end(rgb_buffer.as_mut())?;
 
     if read_bytes != width * height * 3 {
         return Err(TinyppmError::new(TinyppmError::FileSizeMismatch));
@@ -79,7 +79,7 @@ fn read_image_info(reader: &mut BufReader<File>) -> Result<(usize, usize), Tinyp
     let color_depth = string_buffer.lines().nth(2usize).unwrap().to_string().clone();
 
     if ! is_image_24bpp(color_depth) {
-        return Err(TinyppmError::new(TinyppmError::Not24bpp));
+        return Err(TinyppmError::new(TinyppmError::UnsupportedBPP));
     }
 
     Ok((width, height))
@@ -91,6 +91,9 @@ fn is_image_24bpp(bpp_str: String) -> bool {
     bpp == 255usize
 }
 
+/// return tuple containing:
+/// - image height
+/// - image width
 fn extract_image_size(size: String) -> (usize, usize) {
     let image_size: Vec<String> = size.split_whitespace().into_iter().map(|w| w.to_string()).collect();
     let width = image_size.first().unwrap()
