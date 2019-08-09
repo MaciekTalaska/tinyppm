@@ -39,10 +39,8 @@ pub fn read_image_data(image_name: &str) -> Result<(usize, usize, Vec<u32>), Tin
     let mut rgb_buffer: Vec<u8> = Vec::with_capacity(width * height * 3);
     let read_bytes = reader.read_to_end(rgb_buffer.as_mut()).unwrap();
 
-    // TODO: return custom error here
     if read_bytes != width * height * 3 {
-        println!("error while reading image data");
-        std::process::exit(5);
+        return Err(TinyppmError::new(TinyppmError::FileSizeMismatch));
     }
 
     let buffer = convert_rgb_to_argb(width, height, &mut rgb_buffer);
