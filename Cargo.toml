@@ -1,6 +1,6 @@
 [package]
 name = "tinyppm"
-version = "0.1.6"
+version = "0.2.0"
 authors = ["MaciekTalaska <maciek.talaska@gmail.com>"]
 edition = "2018"
 description = "simpliest .ppm image format loader"
