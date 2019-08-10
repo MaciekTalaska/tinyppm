@@ -3,10 +3,12 @@ tinyppm
 
 Simple .ppm loader written in Rust.
 
-This is more of a toy project, I have written, to be able to easy reuse it for some of my experiments with 2d graphhics in Rust.
+This is more of a toy project, I have written, to be able to easy reuse it for some of my experiments with 2d graphics in Rust.
 
 Usage
 -----
+
+*v.0.20.0 Note:* I have added some error handling, as I believe the crate itself (library) should not exit when something unexpected (but not necessarily unrecoverable) happens. It is the responsibility of the consumer to decide what to do when error occurs.
 
 1. Add `tinyppm` to your `Cargo.toml`
 2. Call `read_image_data`:
@@ -15,8 +17,12 @@ Usage
 extern crate tinyppm;
 
 fn my_function(filename: &String) {
-    let (width, height, image) = tinyppm:ppm_loader::read_image_data(filename);
-    // `image` contains 32bit image data
+    let ppm_image_result = tinyppm::ppm_loader::read_image_data(filename);
+    let ppm_image = match ppm_image_result {
+        Ok(image) => image,
+        _ => panic!("unable to read specified image file!"),
+    };
+    // `ppm_image` is now a struct containing image with, height and pixels 
 }
 
 ```

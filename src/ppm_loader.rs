@@ -29,23 +29,23 @@ impl PPMImage {
     }
 }
 
-// TODO: change the in-code documentation (this docstring)
-// TODO: if all is Ok, return struct instead of tuple
 /// Reads specified .ppm file
-/// Returns (width: usize, height: usize, pixels: Vec<u32>)
+/// Returns PPMImage struct containing:
+/// - width: usize
+/// - height: usize
+/// - pixels: Vec<u32>
 ///
 /// 24bpp bitmaps are converted to 32 bit, so it is easy to push them to framebuffer.
 ///
-/// # Examples
+/// # Example:
 /// ```rust, no_run
 /// extern crate tinyppm;
 ///
-/// // some code here...
-///
-/// fn my_function(filename: &str) {
-///     let (width, height, image) = tinyppm:ppm_loader::read_image_data(filename);
-///     // `image` contains 32bit image data
-/// }
+/// let ppm_image_result = tinyppm::ppm_loader::read_image_data("my_ppm_image.ppm");
+/// let ppm_image = match ppm_image_result {
+/// Ok(image) => image,
+/// _ => panic!("unable to read specified image file!"),
+/// };
 ///
 /// ```
 pub fn read_image_data(image_name: &str) -> Result<PPMImage, TinyppmError> {
