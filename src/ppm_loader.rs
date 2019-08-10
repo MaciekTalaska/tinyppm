@@ -55,11 +55,7 @@ pub fn read_image_data(image_name: &str) -> Result<PPMImage, TinyppmError> {
     let (width, height) = read_image_info(&mut reader)?;
 
     let mut rgb_buffer: Vec<u8> = Vec::with_capacity(width * height * 3);
-    let read_bytes = reader.read_to_end(rgb_buffer.as_mut())?;
-
-    if read_bytes != width * height * 3 {
-        return Err(TinyppmError::new(TinyppmError::FileSizeMismatch));
-    }
+    reader.read_to_end(rgb_buffer.as_mut())?;
 
     let buffer = convert_rgb_to_argb(width, height, &mut rgb_buffer);
     Ok(PPMImage{

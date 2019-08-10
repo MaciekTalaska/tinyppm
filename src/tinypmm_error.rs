@@ -5,7 +5,6 @@ use std::convert::From;
 pub enum TinyppmError {
     UnsupportedBPP,
     InvalidHeader,
-    FileSizeMismatch,
     FileReadError
 }
 
@@ -16,7 +15,6 @@ impl TinyppmError {
 
     pub fn tinyppm_error_to_message(&self) -> &str {
         match *self {
-            TinyppmError::FileSizeMismatch => "Invalid file size. Unable to read enough data!",
             TinyppmError::InvalidHeader => "File is not proper binary .ppm file!",
             TinyppmError::UnsupportedBPP => "Only 24bpp .ppm images are supported",
             TinyppmError::FileReadError => "Error reading file!"
