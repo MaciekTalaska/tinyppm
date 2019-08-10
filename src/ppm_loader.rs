@@ -11,6 +11,24 @@ pub struct PPMImage {
     pixels: Vec<u32>,
 }
 
+/// public methods (accessors) for PPIMage
+impl PPMImage {
+    /// Returns image height
+    pub fn get_height(&self) -> usize {
+        self.height
+    }
+
+    /// Returns image width
+    pub fn get_width(&self) -> usize {
+        self.width
+    }
+
+    /// Returns image data in ARGB format (8bpp per channel)
+    pub fn get_pixels(&self) -> &Vec<u32> {
+        &self.pixels
+    }
+}
+
 // TODO: change the in-code documentation (this docstring)
 // TODO: if all is Ok, return struct instead of tuple
 /// Reads specified .ppm file
@@ -30,7 +48,7 @@ pub struct PPMImage {
 /// }
 ///
 /// ```
-pub fn read_image_data(image_name: &str) -> Result<(usize, usize, Vec<u32>), TinyppmError> {
+pub fn read_image_data(image_name: &str) -> Result<PPMImage, TinyppmError> {
     let file = File::open(image_name)?;
 
     let mut reader = std::io::BufReader::new(file);
@@ -44,7 +62,11 @@ pub fn read_image_data(image_name: &str) -> Result<(usize, usize, Vec<u32>), Tin
     }
 
     let buffer = convert_rgb_to_argb(width, height, &mut rgb_buffer);
-    Ok((width, height, buffer))
+    Ok(PPMImage{
+        width,
+        height,
+        pixels: buffer
+    })
 }
 
 /// converts 24bpp (8 bpp per channel) into 32bpp (ARGB) image data
