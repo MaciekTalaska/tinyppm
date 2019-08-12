@@ -8,7 +8,7 @@ This is more of a toy project, I have written, to be able to easy reuse it for s
 Usage
 -----
 
-*v.0.20.0 Note:* I have added some error handling, as I believe the crate itself (library) should not exit when something unexpected (but not necessarily unrecoverable) happens. It is the responsibility of the consumer to decide what to do when error occurs.
+*v.0.20.0 Note:* Proper error handling. The crate itself (library) should not exit when something unexpected (but not necessarily unrecoverable) happens. It is the responsibility of the consumer to decide what to do when error occurs.
 
 1. Add `tinyppm` to your `Cargo.toml`
 2. Call `read_image_data`:
@@ -30,9 +30,9 @@ fn my_function(filename: &String) {
 Details:
 --------
 
-`tinyppm` supports only 'raw ppm' format (the most popular format of ppm. More details: [ppm format specification][ppm] ).
+- only 'raw ppm' format is supported (the most popular format of ppm. More details: [ppm format specification][ppm] ).
 
-Another restriction that is important is that at them moment `tinyppm` supports reading only truecolor (24bpp - 3 color channels, 8b per channel) images. After the image is read it is converted to RGB+A format (32bpp) so that it is ready to be pushed directly to framebuffer.
+- `tinyppm` supports only truecolor images (24bits per pixel - 3 color channels & 8 bits per channel). After the image is read it is converted to RGB+A format (32bpp) so that it is ready to be pushed directly to framebuffer.
 
 [ppm]: http://netpbm.sourceforge.net/doc/ppm.html
 
