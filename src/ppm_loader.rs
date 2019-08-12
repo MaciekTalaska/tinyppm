@@ -5,6 +5,7 @@ use crate::tinypmm_error::TinyppmError;
 
 const PPM_BINARY_HEADER : &str = "P6";              // binary ppm header is always "P6"
 
+/// PPMImage struct is returned when the file is read
 pub struct PPMImage {
     height: usize,
     width: usize,
@@ -57,7 +58,7 @@ pub fn read_image_data(image_name: &str) -> Result<PPMImage, TinyppmError> {
     let mut rgb_buffer: Vec<u8> = Vec::with_capacity(width * height * 3);
     reader.read_to_end(rgb_buffer.as_mut())?;
 
-    let buffer = convert_rgb_to_argb(width, height, &mut rgb_buffer);
+    let buffer = convert_rgb_to_argb(width, height, &rgb_buffer[..]);
     Ok(PPMImage{
         width,
         height,
@@ -66,7 +67,7 @@ pub fn read_image_data(image_name: &str) -> Result<PPMImage, TinyppmError> {
 }
 
 /// converts 24bpp (8 bpp per channel) into 32bpp (ARGB) image data
-fn convert_rgb_to_argb(width: usize, height: usize, rgb_buffer: &mut Vec<u8>) -> Vec<u32> {
+fn convert_rgb_to_argb(width: usize, height: usize, rgb_buffer: &[u8]) -> Vec<u32> {
     let mut buffer: Vec<u32> = vec![0; width * height];
     for index in 0..width * height {
         let pixel = index * 3;
