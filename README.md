@@ -42,15 +42,15 @@ pub struct PPMImage {
 and  it exposes 3 public methods:
 
 ```rust
-    pub fn get_height() -> usize {
+    pub fn height() -> usize {
         // returns image height
     }
 
-    pub fn get_width() -> usize {
-        // returns image widht
+    pub fn width() -> usize {
+        // returns image width
     }
 
-    pub fn get_pixels() -> &Vec<u32> {
+    pub fn pixels() -> &Vec<u32> {
         // returns reference to buffer containing pixels
     } 
 ```
