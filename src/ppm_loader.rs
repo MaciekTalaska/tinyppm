@@ -3,7 +3,8 @@ use std::io::{Read, BufRead};
 use std::io::BufReader;
 use crate::tinypmm_error::TinyppmError;
 
-const PPM_BINARY_HEADER : &str = "P6";              // binary ppm header is always "P6"
+// binary ppm header is always "P6"
+const PPM_BINARY_HEADER : &str = "P6";
 
 /// PPMImage struct is returned when the file is read
 pub struct PPMImage {
@@ -15,17 +16,17 @@ pub struct PPMImage {
 /// public methods (accessors) for PPIMage
 impl PPMImage {
     /// Returns image height
-    pub fn get_height(&self) -> usize {
+    pub fn height(&self) -> usize {
         self.height
     }
 
     /// Returns image width
-    pub fn get_width(&self) -> usize {
+    pub fn width(&self) -> usize {
         self.width
     }
 
     /// Returns image data in ARGB format (8bpp per channel)
-    pub fn get_pixels(&self) -> &Vec<u32> {
+    pub fn pixels(&self) -> &Vec<u32> {
         &self.pixels
     }
 }
