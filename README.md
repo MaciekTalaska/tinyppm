@@ -8,7 +8,10 @@ This is more of a toy project, I have written, to be able to easy reuse it for s
 Usage
 -----
 
-*v.0.20.0 Note:* Proper error handling. The crate itself (library) should not exit when something unexpected (but not necessarily unrecoverable) happens. It is the responsibility of the consumer to decide what to do when error occurs.
+**v.0.20.0 Note:** This version introduces proper error handling. Earlier `tinyppm` was a bit of pain as it exited when something unexpected happened (unrecognized header, unsupported color depth, non-existing/unreadable file specified...). 
+ Currently `tinyppm` returns an error in case some problem occurs. It is responsibility of the consumer to decide if this is critical or not, and take appropriate action.
+ 
+ **Note:** the above change will require some slight modification of code that relies on `tinyppm 0.1.x`.
 
 1. Add `tinyppm` to your `Cargo.toml`
 2. Call `read_image_data`:
@@ -32,7 +35,7 @@ Details:
 
 - only 'raw ppm' format is supported (the most popular format of ppm. More details: [ppm format specification][ppm] ).
 
-- `tinyppm` supports only truecolor images (24bits per pixel - 3 color channels & 8 bits per channel). After the image is read it is converted to RGB+A format (32bpp) so that it is ready to be pushed directly to framebuffer.
+- `tinyppm` supports only True Color images (i.e. 24bits per pixel - 3 color channels & 8 bits per channel). After the image is read it is converted to RGB+A format (32bpp) so that it is ready to be pushed directly to framebuffer.
 
 [ppm]: http://netpbm.sourceforge.net/doc/ppm.html
 
