@@ -30,6 +30,25 @@ fn my_function(filename: &String) {
 
 ```
 
+The structure returned is defined as follows:
+
+```rust
+pub struct PPMImage {
+    height: usize,
+    width: usize,
+    pixels: Vec<u32>,
+}
+```
+and  it exposes 3 public methods:
+
+```rust
+    pub fn get_height() -> usize
+
+    pub fn get_width() -> usize
+
+    pub fn get_pixels() -> &Vec<u32> 
+```
+
 Details:
 --------
 
