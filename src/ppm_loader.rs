@@ -1,4 +1,3 @@
-use std::fs::File;
 use std::io::{Read, BufRead};
 use std::io::BufReader;
 use crate::tinypmm_error::TinyppmError;
@@ -43,17 +42,18 @@ impl PPMImage {
 /// ```rust, no_run
 /// extern crate tinyppm;
 ///
-/// let ppm_image_result = tinyppm::ppm_loader::read_image_data("my_ppm_image.ppm");
+/// use std::fs::File;
+///
+/// let ppm_file = File::open("my_ppm_image.ppm").unwrap();
+/// let ppm_image_result = tinyppm::ppm_loader::read_image_data(ppm_file);
 /// let ppm_image = match ppm_image_result {
 /// Ok(image) => image,
 /// _ => panic!("unable to read specified image file!"),
 /// };
 ///
 /// ```
-pub fn read_image_data(image_name: &str) -> Result<PPMImage, TinyppmError> {
-    let file = File::open(image_name)?;
-
-    let mut reader = std::io::BufReader::new(file);
+pub fn read_image_data<R: Read>(image: R) -> Result<PPMImage, TinyppmError> {
+    let mut reader = std::io::BufReader::new(image);
     let (width, height) = read_image_info(&mut reader)?;
 
     let mut rgb_buffer: Vec<u8> = Vec::with_capacity(width * height * 3);
@@ -82,7 +82,7 @@ fn convert_rgb_to_argb(width: usize, height: usize, rgb_buffer: &[u8]) -> Vec<u3
 }
 
 /// Reads image info (header) and returns tuple with (with, height)
-fn read_image_info(reader: &mut BufReader<File>) -> Result<(usize, usize), TinyppmError> {
+fn read_image_info<R: Read>(reader: &mut BufReader<R>) -> Result<(usize, usize), TinyppmError> {
     let mut string_buffer = String::new();
     for _i in 0..3 {
         reader.read_line(&mut string_buffer).unwrap();
